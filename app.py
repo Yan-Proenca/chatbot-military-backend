@@ -190,4 +190,4 @@ if __name__ == "__main__":
     porta = int(os.environ.get("PORT", 5001))
     
     # O host="0.0.0.0" é OBRIGATÓRIO para a Render, pois permite conexões externas.
-    socketio.run(app, host="0.0.0.0", port=porta)
+    socketio.run(app)
