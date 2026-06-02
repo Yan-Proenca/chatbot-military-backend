@@ -1,3 +1,13 @@
+import sys
+
+if sys.platform != 'win32':
+    try:
+        from gevent import monkey
+        monkey.patch_all()
+    except ImportError:
+        print("Gevent não encontrado. O desempenho do WebSocket pode ser afetado. Instale com 'pip install gevent' para melhor performance.")
+
+
 from flask import Flask, request, session, jsonify
 from flask_socketio import SocketIO, emit
 from google import genai
