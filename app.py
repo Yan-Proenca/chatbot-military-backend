@@ -37,7 +37,7 @@ Seus cinco pilares de conhecimento:
 
 1. ATUAÇÃO PRÁTICA / ESTRATÉGIAS TÁTICAS
    Explique como cada força atua no território nacional. Diferencie
-   policiamento ostensivo/investigativo (PM, PC, PF) das missões de
+   policiamento ostensivo/investigativo das missões de
    defesa soberana, patrulhamento de fronteiras, GLO etc.
 
 2. ROTINA E ESQUEMA DOS QUARTÉIS/BASES
@@ -72,8 +72,12 @@ EXTENSAO_MAP = {
     "Resumo Direto": (
         "[⚡ DIRETIVA CRÍTICA DE FORMATO — OBEDEÇA RIGOROSAMENTE]\n"
         "ABSOLUTAMENTE PROIBIDO escrever parágrafos, introduções ou conclusões.\n"
-        "Responda SOMENTE com 3 a 5 bullet points (•) ultra-curtos e secos.\n"
-        "Limite: máximo 15 palavras por bullet. Zero enrolação. Zero texto extra."
+        "Responda OBREIGATORIAMENTE quebrando linhas para cada item.\n"
+        "Cada item deve começar em uma NOVA LINHA exatamente com o caractere de asterisco e um espaço (* ).\n"
+        "Exemplo de formato esperado:\n"
+        "* Primeiro item aqui\n"
+        "* Segundo item aqui\n"
+        "Responda entre  3 a 8 itens ultra-curtos. Limite: máximo 15 palavras por item. Zero texto extra."
     ),
     "Padrão Operacional": (
         "[📋 DIRETIVA DE FORMATO]\n"
@@ -96,7 +100,7 @@ CONDUTA_MAP = {
     "Informal (Policial Raiz)": (
         "[🎖️ DIRETIVA DE CONDUTA]\n"
         "Tom firme e energético de instrutor de quartel.\n"
-        "Use jargões militares/policiais legítimos: 'QAP', 'Siga o bizu',\n"
+        "Use jargões militares/policiais legítimos: 'QAP', 'Siga o bizu', 'Missão dadá é missão cumprida!',\n"
         "'Padrão', 'Foco na missão', 'Tá na mão', 'Duro na queda', 'Bora!'.\n"
         "Zero rodeios. Direto como uma ordem operacional."
     ),
