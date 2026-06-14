@@ -18,7 +18,7 @@ import os
 
 load_dotenv()
 
-MODELO = "gemini-2.0-flash-lite"
+MODELO = "gemini-3.1-flash-lite"
 
 # ──────────────────────────────────────────────────────────────
 # SYSTEM INSTRUCTION BASE (imutável — define a personalidade)
