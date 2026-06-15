@@ -155,24 +155,44 @@ def build_prompt(mensagem: str, forca: str, vetor: str,
                  conduta: str, extensao: str) -> str:
     """
     Constrói o prompt contextualizado que será enviado ao Gemini.
-    Injeta diretivas de formato e conduta antes da pergunta do usuário.
+    Trata dinamicamente se o usuário escolheu o modo livre ("Geral").
     """
     dir_extensao = EXTENSAO_MAP.get(extensao, EXTENSAO_MAP["Padrão Operacional"])
     dir_conduta  = CONDUTA_MAP.get(conduta,  CONDUTA_MAP["Formal"])
 
+    # ── CONTEXTUALIZAÇÃO DO ESCOPO DA FORÇA ──
+    if forca == "Geral":
+        contexto_forca = (
+            "[🌐 ESCOPO: LIVRE/GERAL]\n"
+            "O operador optou por não filtrar uma força específica. Identifique pelo teor da pergunta "
+            "se ele se refere às Forças Armadas, Segurança Pública ou a ambas de forma geral, e responda de acordo."
+        )
+    else:
+        contexto_forca = f"[🛡️ FORÇA OPERACIONAL ALVO: {forca.upper()}]"
+
+    # ── CONTEXTUALIZAÇÃO DO VETOR DE CONHECIMENTO ──
+    if vetor == "Geral":
+        contexto_vetor = (
+            "[🎯 VETOR: CONSULTA ABERTA]\n"
+            "Não há restrição de pilar temático. Responda analisando de forma holística qualquer aspecto necessário "
+            "(estratégia, concursos, história, rotina ou patentes) conforme demandado pela dúvida do operador."
+        )
+    else:
+        contexto_vetor = f"[🎯 VETOR TEMÁTICO DE INQUIRIÇÃO: {vetor.upper()}]"
+
+    # Montagem do prompt integrado que é enviado ao Gemini
     prompt = (
-        f"╔══ PARÂMETROS DA CONSULTA ══════════════════╗\n"
-        f"  Força Operacional : {forca}\n"
-        f"  Vetor de Consulta : {vetor}\n"
-        f"  Conduta           : {conduta}\n"
-        f"  Extensão          : {extensao}\n"
-        f"╚════════════════════════════════════════════╝\n\n"
-        f"{dir_extensao}\n\n"
-        f"{dir_conduta}\n\n"
-        f"CONSULTA DO OPERADOR SOBRE {forca.upper()}"
-        f" — FOCO EM: {vetor.upper()}\n"
+        f"╔══ CONTEXTO OPERACIONAL DE SISTEMA ════════════════════════\n"
+        f"{contexto_forca}\n"
+        f"{contexto_vetor}\n"
+        f"────────────────────────────────────────────────────────────\n"
+        f"{dir_conduta}\n"
+        f"{dir_extensao}\n"
+        f"╚═══════════════════════════════════════════════════════════\n\n"
+        f"PERGUNTA DO OPERADOR:\n"
         f"{mensagem}"
     )
+
     return prompt
 
 
