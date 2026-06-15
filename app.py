@@ -18,7 +18,7 @@ import os
 
 load_dotenv()
 
-MODELO = "gemini-2.0-flash-lite"
+MODELO = "gemini-3.1-flash-lite"
 
 # ──────────────────────────────────────────────────────────────
 # SYSTEM INSTRUCTION BASE (imutável — define a personalidade)
@@ -37,7 +37,7 @@ Seus cinco pilares de conhecimento:
 
 1. ATUAÇÃO PRÁTICA / ESTRATÉGIAS TÁTICAS
    Explique como cada força atua no território nacional. Diferencie
-   policiamento ostensivo/investigativo (PM, PC, PF) das missões de
+   policiamento ostensivo/investigativo das missões de
    defesa soberana, patrulhamento de fronteiras, GLO etc.
 
 2. ROTINA E ESQUEMA DOS QUARTÉIS/BASES
@@ -72,8 +72,12 @@ EXTENSAO_MAP = {
     "Resumo Direto": (
         "[⚡ DIRETIVA CRÍTICA DE FORMATO — OBEDEÇA RIGOROSAMENTE]\n"
         "ABSOLUTAMENTE PROIBIDO escrever parágrafos, introduções ou conclusões.\n"
-        "Responda SOMENTE com 3 a 5 bullet points (•) ultra-curtos e secos.\n"
-        "Limite: máximo 15 palavras por bullet. Zero enrolação. Zero texto extra."
+        "Responda OBREIGATORIAMENTE quebrando linhas para cada item.\n"
+        "Cada item deve começar em uma NOVA LINHA exatamente com o caractere de asterisco e um espaço (* ).\n"
+        "Exemplo de formato esperado:\n"
+        "* Primeiro item aqui\n"
+        "* Segundo item aqui\n"
+        "Responda entre  3 a 8 itens ultra-curtos. Limite: máximo 15 palavras por item. Zero texto extra."
     ),
     "Padrão Operacional": (
         "[📋 DIRETIVA DE FORMATO]\n"
@@ -96,7 +100,7 @@ CONDUTA_MAP = {
     "Informal (Policial Raiz)": (
         "[🎖️ DIRETIVA DE CONDUTA]\n"
         "Tom firme e energético de instrutor de quartel.\n"
-        "Use jargões militares/policiais legítimos: 'QAP', 'Siga o bizu',\n"
+        "Use jargões militares/policiais legítimos: 'QAP', 'Siga o bizu', 'Missão dadá é missão cumprida!',\n"
         "'Padrão', 'Foco na missão', 'Tá na mão', 'Duro na queda', 'Bora!'.\n"
         "Zero rodeios. Direto como uma ordem operacional."
     ),
@@ -151,24 +155,44 @@ def build_prompt(mensagem: str, forca: str, vetor: str,
                  conduta: str, extensao: str) -> str:
     """
     Constrói o prompt contextualizado que será enviado ao Gemini.
-    Injeta diretivas de formato e conduta antes da pergunta do usuário.
+    Trata dinamicamente se o usuário escolheu o modo livre ("Geral").
     """
     dir_extensao = EXTENSAO_MAP.get(extensao, EXTENSAO_MAP["Padrão Operacional"])
     dir_conduta  = CONDUTA_MAP.get(conduta,  CONDUTA_MAP["Formal"])
 
+    # ── CONTEXTUALIZAÇÃO DO ESCOPO DA FORÇA ──
+    if forca == "Geral":
+        contexto_forca = (
+            "[🌐 ESCOPO: LIVRE/GERAL]\n"
+            "O operador optou por não filtrar uma força específica. Identifique pelo teor da pergunta "
+            "se ele se refere às Forças Armadas, Segurança Pública ou a ambas de forma geral, e responda de acordo."
+        )
+    else:
+        contexto_forca = f"[🛡️ FORÇA OPERACIONAL ALVO: {forca.upper()}]"
+
+    # ── CONTEXTUALIZAÇÃO DO VETOR DE CONHECIMENTO ──
+    if vetor == "Geral":
+        contexto_vetor = (
+            "[🎯 VETOR: CONSULTA ABERTA]\n"
+            "Não há restrição de pilar temático. Responda analisando de forma holística qualquer aspecto necessário "
+            "(estratégia, concursos, história, rotina ou patentes) conforme demandado pela dúvida do operador."
+        )
+    else:
+        contexto_vetor = f"[🎯 VETOR TEMÁTICO DE INQUIRIÇÃO: {vetor.upper()}]"
+
+    # Montagem do prompt integrado que é enviado ao Gemini
     prompt = (
-        f"╔══ PARÂMETROS DA CONSULTA ══════════════════╗\n"
-        f"  Força Operacional : {forca}\n"
-        f"  Vetor de Consulta : {vetor}\n"
-        f"  Conduta           : {conduta}\n"
-        f"  Extensão          : {extensao}\n"
-        f"╚════════════════════════════════════════════╝\n\n"
-        f"{dir_extensao}\n\n"
-        f"{dir_conduta}\n\n"
-        f"CONSULTA DO OPERADOR SOBRE {forca.upper()}"
-        f" — FOCO EM: {vetor.upper()}\n"
+        f"╔══ CONTEXTO OPERACIONAL DE SISTEMA ════════════════════════\n"
+        f"{contexto_forca}\n"
+        f"{contexto_vetor}\n"
+        f"────────────────────────────────────────────────────────────\n"
+        f"{dir_conduta}\n"
+        f"{dir_extensao}\n"
+        f"╚═══════════════════════════════════════════════════════════\n\n"
+        f"PERGUNTA DO OPERADOR:\n"
         f"{mensagem}"
     )
+
     return prompt
 
 
