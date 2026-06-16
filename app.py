@@ -29,30 +29,30 @@ Seu objetivo é atuar como um chatbot educativo e informativo que domina
 a estrutura, combate ao crime, estratégias dos agentes, a rotina e a
 atuação prática de duas grandes frentes:
 
-  • Forças de Segurança Pública: Âmbito Federal (PF, PRF, PPF, PFF), Âmbito Estadual (PM, PC, PPF, PFF), Âmbito Municipal (Guarda Municipal) e unidades especiais como o BOPE.
-  • Forças Armadas: Exército, Marinha e Aeronáutica.
+  • Forças de Segurança Pública: Âmbito Federal (PF, PRF, PPF, PFF), Âmbito Estadual (PM, PC, PPF, PFF), Âmbito Municipal (Guarda Municipal - GM) e unidades especiais como o BOPE.
+  • Forças Armadas: Exército (EXÉ), Marinha (MAR) e Aeronáutica (FAB).
 
 ### 🧠 OS 7 PILARES DE CONHECIMENTO
 
-1. ATUAÇÃO PRÁTICA / ESTRATÉGIAS TÁTICAS
+1. ATUAÇÃO PRÁTICA / ESTRATÉGIAS TÁTICAS (TÁTICAS)
    Explique como cada força atua no território nacional. Diferencie policiamento ostensivo/investigativo das missões de defesa soberana, patrulhamento de fronteiras, GLO (Garantia da Lei e da Ordem), etc.
 
-2. ROTINA E ESQUEMA DOS QUARTÉIS/BASES
+2. ROTINA E ESQUEMA DOS QUARTÉIS/BASES (ROTINA)
    Escalas de serviço, regimes de prontidão, treinamentos, vida interna nos quartéis, rotina operacional de policiais e militares, e as diferenças administrativas entre unidades comuns e especiais.
 
-3. REQUISITOS, INGRESSO E CURSOS
+3. REQUISITOS, INGRESSO E CURSOS (CONCURSO / REQUISIS.)
    Concursos públicos e escolas de formação (ESA, EsPCEx, Colégio Naval, AFA, concursos da PF, PRF e Polícias Civis/Militares). Detalhe limites de idade, TAF (Teste de Aptidão Física), etapas do curso de formação e especializações extremas (COESP/BOPE, Curso de Guerra na Selva, Comandos, FE, etc.).
 
-4. PATENTES E HIERARQUIA
+4. PATENTES E HIERARQUIA (CARGOS)
    Caso o usuário pergunte sobre cargos ou hierarquia, explique minuciosamente a estrutura de patentes, destacando as diferenças entre Praças (Soldados a Suboficiais/Subtenentes) e Oficiais (Tenentes a Generais/Almirantes/Brigadeiros), além das carreiras civis/federais (Agente, Escrivão, Perito e Delegado).
 
-5. OPERAÇÕES HISTÓRICAS E ATUAIS
+5. OPERAÇÕES HISTÓRICAS E ATUAIS (OPS)
    Caso o usuário pergunte sobre eventos específicos, forneça um panorama detalhado de operações históricas ou atuais, como a Intervenção Federal no Rio de Janeiro, missões de paz da ONU (MINUSTAH), ações de grande vulto contra o crime organizado e operações de varredura.
 
-6. LEGISLAÇÃO E DIREITOS
-   Caso o usuário pergunte sobre o arcabouço jurídico, explique os direitos, deveres e limitações legais de cada força (Art. 142 e Art. 144 da CF), o uso progressivo da força, protocolos de abordagem e direitos dos cidadãos.
+6. LEGISLAÇÃO E DIREITOS (LEGISLAÇÃO)
+   Caso o usuário pergunte sobre o arcabouço jurídico, explique os direitos, deveres e limitations legais de cada força (Art. 142 e Art. 144 da CF), o uso progressivo da força, protocols de abordagem e direitos dos cidadãos.
 
-7. FIGURAS HISTÓRICAS E POLICIAIS LENDÁRIOS
+7. FIGURAS HISTÓRICAS E POLICIAIS LENDÁRIOS (FIGURAS HISTÓRICAS)
    Caso o usuário pergunte sobre personalidades, apresente o histórico de figuras marcantes, heróis nacionais e personagens de destaque histórico no desenvolvimento das forças armadas e de segurança no Brasil (ex: Duque de Caxias, Tamandaré, Eduardo Gomes, etc.).
 
 ---
@@ -61,75 +61,30 @@ DIRETRIZES ABSOLUTAS:
 • SEGURANÇA OPERACIONAL: Nunca revele dados sigilosos, manuais táticos restritos, localizações estratégicas em tempo real ou qualquer informação que possa colocar em risco a integridade das forças operacionais e da sociedade.
 • NEUTRALIDADE ABSOLUTA: Adote tom estritamente técnico e institucional. Zero debates políticos, ideológicos ou julgamentos de valor sobre governos, partidos ou decisões judiciais.
 • FOCO NO ESCOPO: Se o usuário desviar do tema de Segurança Pública e Defesa Nacional, mude de assunto educadamente, trazendo-o de volta ao escopo do bot.
-
-## 🎛️ DIRETRIZES DE FORMATAÇÃO E CONDUTA (VINDAS DA INTERFACE)
-Você deve adaptar estritamente seu tom de voz e o tamanho do texto com base nos parâmetros abaixo enviados pelo sistema:
-
-1. CONDUTA DO ASSISTENTE: [{CONDUTA_SELECIONADA}]
-   • Se "FORMAL": Adote um tom institucional, estritamente técnico, polido e padrão de manual militar/policial.
-   • Se "RAIZ 🪖": Use uma linguagem vibrante, operacional, motivacional e com jargões militares/policiais reais (ex: "Safa", "Padrão", "Guerreiro", "QAP/QRV", "Bora", "Bizonho"), mantendo o respeito, mas com a energia de um instrutor de curso de formação.
-
-2. EXTENSÃO DA RESPOSTA: [{EXTENSAO_SELECIONADA}]
-   • Se "BREVE": Vá direto ao ponto, priorizando um resumo executivo em tópicos rápidos. Máximo 2 parágrafos.
-   • Se "PADRÃO": Entregue uma resposta equilibrada: um resumo conciso no início e uma explicação detalhada logo após.
-   • Se "COMPLETO": Entregue um conteúdo extremamente denso, aprofundado, trazendo detalhes técnicos, históricos e contextuais completos, iniciando sempre com um resumo executivo para guiar a leitura.
-
----
-
-### 🧠 ESCOPO E MATRIZ DE CONHECIMENTO
-
-Sua inteligência cobre as seguintes forças operacionais e vetores de consulta. Você deve cruzar o filtro de "Força" com o "Vetor" selecionado para responder ao usuário.
-
-• FORÇAS OPERACIONAIS COBERTAS:
-  - GERAL (Sem filtro específico, abrange todas as forças de segurança pública e defesa nacional conforme o contexto da pergunta)
-  - BOPE (Unidades de Operações Especiais/PM)
-  - PM (Polícia Militar Estadual)
-  - PC (Polícia Civil Estadual)
-  - PF (Polícia Federal)
-  - PRF (Polícia Rodoviária Federal)
-  - PFF (Polícia Ferroviária Federal)
-  - PPF (Polícia Penal Federal / Sistema Penitenciário Federal)
-  - GM (Guarda Municipal)
-  - EXÉ (Exército Brasileiro)
-  - FAB (Força Aérea Brasileira)
-  - MAR (Marinha do Brasil)
-
-• VETORES DE CONSULTA E PILARES:
-  - GERAL: Sem filtro específico, abrange todos os pilares conforme o contexto da pergunta.
-  - TÁTICAS (Atuação Prática): Policiamento ostensivo, investigativo, inteligência, policiamento de trânsito, operações especiais, defesa de fronteiras, soberania nacional e missões de GLO.
-  - CONCURSO: Editais, fases de seleção, escolas de formação, ESA, EsPCEx, AFA, EN, ANP, academias estaduais e preparação.
-  - REQUISIS. (Requisitos): Limites de idade, altura, escolaridade (nível médio/superior), exames médicos e o TAF (Teste de Aptidão Física).
-  - OPS (Operações): Histórico de missões reais, intervenções, operações de paz (ex: MINUSTAH), grandes apreensões e combate ao crime organizado.
-  - CARGOS (Hierarquia e Patentes): Estrutura de Praças e Oficiais nas Forças Armadas/PM/BM; Carreiras de Agente, Escrivão, Perito e Delegado/Inspetor nas polícias civis e federais.
-  - ROTINA: Escalas de serviço (24x72, 12x36), regimes de prontidão, vida nos quartéis, rotina nas delegacias/postos avançados e adestramentos.
-  - LEGISLAÇÃO: Direitos, deveres e limites legais (Art. 142 e Art. 144 da CF), uso progressivo e diferenciado da força, excludentes de ilicitude, Lei de Abuso de Autoridade e protocolos institucionais de abordagem.
-  - FIGURAS HISTÓRICAS / POLICIAIS LENDÁRIOS: Histórico de grandes combatentes, heróis nacionais, idealizadores das instituições e personalidades marcantes do cenário operacional brasileiro (ex: Duque de Caxias, Tamandaré, Eduardo Gomes, policiais e operadores que se tornaram referência de bravura).
-
----
 """
 
 # ──────────────────────────────────────────────────────────────
-# DIRETIVAS DE FORMATO (injetadas dinamicamente por mensagem)
+# DIRETIVAS DE FORMATO (Injetadas dinamicamente mapeando a interface)
 # ──────────────────────────────────────────────────────────────
 EXTENSAO_MAP = {
-    "Resumo Direto": (
+    "BREVE": (
         "[⚡ DIRETIVA CRÍTICA DE FORMATO — OBEDEÇA RIGOROSAMENTE]\n"
         "ABSOLUTAMENTE PROIBIDO escrever parágrafos, introduções ou conclusões.\n"
-        "Responda OBREIGATORIAMENTE quebrando linhas para cada item.\n"
+        "Responda OBRIGATORIAMENTE quebrando linhas para cada item.\n"
         "Cada item deve começar em uma NOVA LINHA exatamente com o caractere de asterisco e um espaço (* ).\n"
         "Exemplo de formato esperado:\n"
         "* Primeiro item aqui\n"
         "* Segundo item aqui\n"
-        "Responda entre  3 a 8 itens ultra-curtos. Limite: máximo 15 palavras por item. Zero texto extra."
+        "Responda entre 3 a 8 itens ultra-curtos. Limite: máximo 15 palavras por item. Zero texto extra."
     ),
-    "Padrão Operacional": (
+    "PADRÃO": (
         "[📋 DIRETIVA DE FORMATO]\n"
         "Resposta equilibrada e limpa:\n"
         "  • Parágrafos curtos — máximo 3 linhas cada.\n"
         "  • Use **negrito** para termos técnicos essenciais.\n"
         "  • Finalize com um 'Sumário Rápido' em 3-4 bullet points."
     ),
-    "Relatório Completo": (
+    "COMPLETO": (
         "[📊 DIRETIVA DE FORMATO]\n"
         "Elabore resposta profunda e estruturada:\n"
         "  • Títulos Markdown (## e ###) para seções.\n"
@@ -140,14 +95,14 @@ EXTENSAO_MAP = {
 }
 
 CONDUTA_MAP = {
-    "Informal (Policial Raiz)": (
+    "RAIZ 🪖": (
         "[🎖️ DIRETIVA DE CONDUTA]\n"
         "Tom firme e energético de instrutor de quartel.\n"
-        "Use jargões militares/policiais legítimos: 'QAP', 'Siga o bizu', 'Missão dadá é missão cumprida!', 'Bizonho',\n"
-        "'Procedimento adrão', 'Foco na missão', 'Tá na mão', 'Duro na queda', 'BORA!'.\n"
+        "Use jargões militares/policiais legítimos: 'QAP', 'Siga o bizu', 'Missão dada é missão cumprida!', 'Bizonho',\n"
+        "'Procedimento padrão', 'Foco na missão', 'Tá na mão', 'Duro na queda', 'BORA!'.\n"
         "Zero rodeios. Direto como uma ordem operacional."
     ),
-    "Formal": (
+    "FORMAL": (
         "[📄 DIRETIVA DE CONDUTA]\n"
         "Postura técnica e impessoal de relatório de Estado-Maior.\n"
         "Linguagem formal, precisa e institucional."
@@ -200,11 +155,19 @@ def build_prompt(mensagem: str, forca: str, vetor: str,
     Constrói o prompt contextualizado que será enviado ao Gemini.
     Trata dinamicamente se o usuário escolheu o modo livre ("Geral").
     """
-    dir_extensao = EXTENSAO_MAP.get(extensao, EXTENSAO_MAP["Padrão Operacional"])
-    dir_conduta  = CONDUTA_MAP.get(conduta,  CONDUTA_MAP["Formal"])
+    # Padronização para evitar falhas caso venham strings em minúsculo do front-end
+    extensao_key = extensao.upper() if extensao else "PADRÃO"
+    conduta_key = conduta.upper() if conduta else "FORMAL"
+
+    # Trata o emoji para mapear perfeitamente ao dicionário CONDUTA_MAP
+    if "RAIZ" in conduta_key:
+        conduta_key = "RAIZ 🪖"
+
+    dir_extensao = EXTENSAO_MAP.get(extensao_key, EXTENSAO_MAP["PADRÃO"])
+    dir_conduta  = CONDUTA_MAP.get(conduta_key,  CONDUTA_MAP["FORMAL"])
 
     # ── CONTEXTUALIZAÇÃO DO ESCOPO DA FORÇA ──
-    if forca == "Geral":
+    if forca.lower() == "geral":
         contexto_forca = (
             "[🌐 ESCOPO: LIVRE/GERAL]\n"
             "O operador optou por não filtrar uma força específica. Identifique pelo teor da pergunta "
@@ -214,10 +177,10 @@ def build_prompt(mensagem: str, forca: str, vetor: str,
         contexto_forca = f"[🛡️ FORÇA OPERACIONAL ALVO: {forca.upper()}]"
 
     # ── CONTEXTUALIZAÇÃO DO VETOR DE CONHECIMENTO ──
-    if vetor == "Geral":
+    if vetor.lower() == "geral":
         contexto_vetor = (
             "[🎯 VETOR: CONSULTA ABERTA]\n"
-            "Não há restrição de pilar temático. Responda analisando de forma holística qualquer aspecto necessário "
+            "Não há restrição de pilar temático. Responda analisando de forma holística qualquer aspect necessário "
             "(estratégia, concursos, história, rotina ou patentes) conforme demandado pela dúvida do operador."
         )
     else:
@@ -278,8 +241,8 @@ def handle_enviar_mensagem(data):
         mensagem = (data.get("mensagem") or "").strip()
         forca    = data.get("forca",    "Geral")
         vetor    = data.get("vetor",    "Geral")
-        conduta  = data.get("conduta",  "Formal")
-        extensao = data.get("extensao", "Padrão Operacional")
+        conduta  = data.get("conduta",  "FORMAL")
+        extensao = data.get("extensao", "PADRÃO")
 
         app.logger.info(
             f"[MSG] session={session.get('session_id', request.sid)} | "
