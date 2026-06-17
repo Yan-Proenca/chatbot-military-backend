@@ -1,4 +1,5 @@
 import sys
+import re
 
 if sys.platform != 'win32':
     try:
@@ -29,7 +30,7 @@ Seu objetivo é atuar como um chatbot educativo e informativo que domina
 a estrutura, combate ao crime, estratégias dos agentes, a rotina e a
 atuação prática de duas grandes frentes:
 
-  • Forças de Segurança Pública: Âmbito Federal (PF, PRF, PPF, PFF), Âmbito Estadual (PM, PC, PPF, PFF), Âmbito Municipal (Guarda Municipal - GM) e unidades especiais como o BOPE.
+  • Forças de Segurança Pública: Âmbito Federal (PF, PRF, PPF), Âmbito Estadual (PM, PC) e Âmbito Municipal (Guarda Municipal - GM), além de unidades especiais como o BOPE.
   • Forças Armadas: Exército (EXÉ), Marinha (MAR) e Aeronáutica (FAB).
 
 ### 🧠 OS 7 PILARES DE CONHECIMENTO
@@ -94,6 +95,26 @@ EXTENSAO_MAP = {
     ),
 }
 
+# ──────────────────────────────────────────────────────────────
+# ALIAS DE EXTENSÃO
+# O front-end envia o data-value completo ("Resumo Direto", etc.)
+# mas o EXTENSAO_MAP usa chaves curtas ("BREVE", "PADRÃO", "COMPLETO").
+# Este alias resolve a incompatibilidade sem alterar nenhum dos dois lados.
+# ──────────────────────────────────────────────────────────────
+EXTENSAO_ALIAS = {
+    # Nomes completos vindos do front-end
+    "RESUMO DIRETO":      "BREVE",
+    "PADRÃO OPERACIONAL": "PADRÃO",
+    "PADRAO OPERACIONAL": "PADRÃO",
+    "RELATÓRIO COMPLETO": "COMPLETO",
+    "RELATORIO COMPLETO": "COMPLETO",
+    # Chaves curtas (retrocompatibilidade)
+    "BREVE":   "BREVE",
+    "PADRÃO":  "PADRÃO",
+    "PADRAO":  "PADRÃO",
+    "COMPLETO": "COMPLETO",
+}
+
 CONDUTA_MAP = {
     "RAIZ 🪖": (
         "[🎖️ DIRETIVA DE CONDUTA]\n"
@@ -108,6 +129,111 @@ CONDUTA_MAP = {
         "Linguagem formal, precisa e institucional."
     ),
 }
+
+# ──────────────────────────────────────────────────────────────
+# DETECÇÃO DE INCONSISTÊNCIA FILTRO vs. CONTEÚDO DA PERGUNTA
+# Quando o usuário seleciona uma força/vetor mas pergunta sobre outro,
+# o bot recebe instrução de avisar a inconsistência e responder pelo prompt.
+# ──────────────────────────────────────────────────────────────
+
+# Palavras-chave associadas a cada Força Operacional
+# Intencionalmente específicas para evitar falsos positivos
+FORCA_KEYWORDS: dict[str, list[str]] = {
+    'BOPE':        ['bope', 'batalhão de operações policiais especiais'],
+    'PM':          ['polícia militar', 'policia militar', 'policial militar'],
+    'PC':          ['polícia civil', 'policia civil', 'policial civil', 'delegacia'],
+    'PF':          ['polícia federal', 'policia federal', 'policial federal',
+                    'delegado federal', 'agente federal'],
+    'PRF':         ['polícia rodoviária federal', 'policia rodoviaria federal', 'prf'],
+    'PPF':         ['polícia penal federal', 'policia penal federal',
+                    'agente penal federal', 'ppf'],
+    'GM':          ['guarda municipal', 'guarda-municipal'],
+    'EXÉRCITO':    ['exército', 'exercito', 'força terrestre', 'forca terrestre'],
+    'AERONÁUTICA': ['aeronáutica', 'aeronautica', 'força aérea', 'forca aerea', 'fab'],
+    'MARINHA':     ['marinha do brasil', 'força naval', 'forca naval', 'marinheiro'],
+}
+
+# Palavras-chave associadas a cada Vetor de Consulta
+VETOR_KEYWORDS: dict[str, list[str]] = {
+    'ESTRATÉGIAS TÁTICAS': ['estratégia tática', 'estrategia tatica',
+                             'tática policial', 'tatica policial',
+                             'técnica de abordagem', 'tecnica de abordagem'],
+    'CONCURSO PÚBLICO':    ['concurso público', 'concurso publico',
+                             'edital de concurso', 'prova objetiva', 'gabarito'],
+    'REQUISITOS MÍNIMOS':  ['requisito mínimo', 'requisito minimo',
+                             'altura mínima', 'limite de idade',
+                             'peso mínimo', 'pré-requisito'],
+    'OPERAÇÕES':           ['operação policial', 'operacao policial',
+                             'operação especial', 'missão tática',
+                             'missao tatica', 'operação de'],
+    'CARGOS':              ['patente militar', 'hierarquia militar',
+                             'hierarquia policial', 'promoção de posto',
+                             'graduação militar', 'graduacao militar'],
+    'ROTINA':              ['rotina policial', 'escala de serviço',
+                             'escala de servico', 'plantão', 'rotina do quartel'],
+    'LEGISLAÇÃO':          ['código penal', 'codigo penal',
+                             'constituição federal', 'constituicao federal',
+                             'decreto-lei', 'lei complementar',
+                             'lei n°', 'lei nº', 'artigo da lei',
+                             'resolução normativa'],
+}
+
+
+def _keyword_in_text(keyword: str, text: str) -> bool:
+    """
+    Verifica se `keyword` aparece em `text`.
+    Para siglas curtas (sem espaço, ex: 'prf', 'fab'), usa regex com
+    \\b (word boundary) para não confundir com substrings de outras palavras
+    (ex: 'pf' não deve casar dentro de 'perfeito').
+    Para frases com espaço, usa busca simples por substring.
+    """
+    if ' ' in keyword:
+        return keyword in text
+    pattern = r'\b' + re.escape(keyword) + r'\b'
+    return re.search(pattern, text) is not None
+
+
+def detect_inconsistency(mensagem: str, forca: str, vetor: str) -> list[str]:
+    """
+    Verifica se o conteúdo da mensagem menciona uma força ou vetor
+    diferente do que foi selecionado nos filtros.
+
+    Retorna uma lista de strings descrevendo cada inconsistência encontrada.
+    Retorna lista vazia quando está tudo consistente ou filtro é "Geral".
+    """
+    msg_lower = mensagem.lower()
+    inconsistencias: list[str] = []
+
+    # ── Verificar Força Operacional ───────────────────────────
+    # Só checa quando o usuário selecionou uma força específica (não "Geral")
+    if forca.lower() != 'geral':
+        forca_key = forca.upper()
+        for f_key, keywords in FORCA_KEYWORDS.items():
+            if f_key == forca_key:
+                continue  # Pula a própria força selecionada
+            if any(_keyword_in_text(kw, msg_lower) for kw in keywords):
+                inconsistencias.append(
+                    f'o filtro de **Força Operacional** está definido como **"{forca}"**, '
+                    f'mas o texto da pergunta menciona **{f_key.title()}**'
+                )
+                break  # Relata apenas a primeira inconsistência de força
+
+    # ── Verificar Vetor de Consulta ───────────────────────────
+    # Só checa quando o usuário selecionou um vetor específico (não "Geral")
+    if vetor.lower() != 'geral':
+        vetor_key = vetor.upper()
+        for v_key, keywords in VETOR_KEYWORDS.items():
+            if v_key == vetor_key:
+                continue  # Pula o próprio vetor selecionado
+            if any(_keyword_in_text(kw, msg_lower) for kw in keywords):
+                inconsistencias.append(
+                    f'o filtro de **Vetor de Consulta** está definido como **"{vetor}"**, '
+                    f'mas a pergunta parece abordar **{v_key.title()}**'
+                )
+                break  # Relata apenas a primeira inconsistência de vetor
+
+    return inconsistencias
+
 
 # ──────────────────────────────────────────────────────────────
 # FLASK + SOCKET.IO
@@ -155,11 +281,13 @@ def build_prompt(mensagem: str, forca: str, vetor: str,
     Constrói o prompt contextualizado que será enviado ao Gemini.
     Trata dinamicamente se o usuário escolheu o modo livre ("Geral").
     """
-    # Padronização para evitar falhas caso venham strings em minúsculo do front-end
-    extensao_key = extensao.upper() if extensao else "PADRÃO"
-    conduta_key = conduta.upper() if conduta else "FORMAL"
+    # ── Mapeia extensão: o front-end envia o nome completo, ex: "Resumo Direto"
+    # O alias converte para a chave curta usada pelo EXTENSAO_MAP ("BREVE", etc.)
+    extensao_raw = extensao.upper() if extensao else "RESUMO DIRETO"
+    extensao_key = EXTENSAO_ALIAS.get(extensao_raw, "PADRÃO")
 
-    # Trata o emoji para mapear perfeitamente ao dicionário CONDUTA_MAP
+    # ── Mapeia conduta
+    conduta_key = conduta.upper() if conduta else "FORMAL"
     if "RAIZ" in conduta_key:
         conduta_key = "RAIZ 🪖"
 
@@ -186,11 +314,33 @@ def build_prompt(mensagem: str, forca: str, vetor: str,
     else:
         contexto_vetor = f"[🎯 VETOR TEMÁTICO DE INQUIRIÇÃO: {vetor.upper()}]"
 
+    # ── DETECÇÃO DE INCONSISTÊNCIA FILTRO vs. PERGUNTA ──
+    # Verifica se a pergunta menciona uma força/vetor diferente do filtro selecionado.
+    # Quando houver, o prompt do conteúdo (mensagem) prevalece sobre o filtro,
+    # mas a IA é instruída a avisar o operador sobre a divergência antes de responder.
+    inconsistencias = detect_inconsistency(mensagem, forca, vetor)
+
+    if inconsistencias:
+        lista_avisos = "\n".join(f"  {i+1}. {texto}" for i, texto in enumerate(inconsistencias))
+        contexto_inconsistencia = (
+            "\n[⚠️ DIRETIVA DE INCONSISTÊNCIA DETECTADA — OBEDEÇA OBRIGATORIAMENTE]\n"
+            "Foi identificada uma divergência entre os parâmetros selecionados pelo operador "
+            "e o conteúdo da pergunta:\n"
+            f"{lista_avisos}\n"
+            "AÇÃO OBRIGATÓRIA: Inicie sua resposta com um aviso breve e objetivo (1-2 frases) informando "
+            "essa(s) divergência(s) ao operador, deixando claro que você seguirá o que foi efetivamente "
+            "perguntado no texto (e não apenas o filtro selecionado na interface). Em seguida, responda "
+            "normalmente priorizando o conteúdo da pergunta do operador sobre o filtro da interface.\n"
+        )
+    else:
+        contexto_inconsistencia = ""
+
     # Montagem do prompt integrado que é enviado ao Gemini
     prompt = (
         f"╔══ CONTEXTO OPERACIONAL DE SISTEMA ════════════════════════\n"
         f"{contexto_forca}\n"
         f"{contexto_vetor}\n"
+        f"{contexto_inconsistencia}"
         f"────────────────────────────────────────────────────────────\n"
         f"{dir_conduta}\n"
         f"{dir_extensao}\n"
